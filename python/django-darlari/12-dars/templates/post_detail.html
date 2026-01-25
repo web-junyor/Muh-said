@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<article class="post-detail">
+  <h2>{{ post.title }}</h2>
+  <p class="post-author">{{ post.author }}</p>
+
+<div class="post-body">
+  {% if post.image %}
+    <img src="{{ post.image.url }}" alt="post image" style="max-width:100%; border-radius:10px;">
+  {% endif %}
+  <p>{{ post.body }}</p>
+</div>
+
+
+  <div class="post-actions">
+    <a href="{% url 'post_edit' post.pk %}">✏️ Tahrirlash</a>
+    <a href="{% url 'post_delete' post.pk %}">🗑 O‘chirish</a>
+  </div>
+</article>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="form-page danger">
+  <h1>Postni o‘chirish</h1>
+  <p>"{{ post.title }}" postni o‘chirmoqchimisiz?</p>
+
+  <form method="post">
+    {% csrf_token %}
+    <button class="danger-btn" type="submit">Ha, o‘chirish</button>
+  </form>
+</section>
+{% endblock %}

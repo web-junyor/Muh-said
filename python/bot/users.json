@@ -11,5 +11,9 @@
     "password": "admin123",
     "user_id": 2109017495,
     "is_admin": true
+  },
+  "\u21a9\ufe0f Orqaga": {
+    "password": "\u21a9\ufe0f Orqaga",
+    "is_admin": false
   }
 }

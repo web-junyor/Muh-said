@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Said Blog</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{% static 'base.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+
+<body>
+ <button class="theme-btn" id="themeToggle" aria-label="Toggle theme"><i class="fa-solid fa-sun"></i></button>
+
+<header class="site-header">
+  <h1 class="site-title">
+    <a href="{% url 'home' %}" class="blog">Said Blog 📝</a>
+  </h1>
+</header>
+
+{% if user.is_authenticated %}
+<p>Xush kelibsiz, {{ user.username }}!</p>
+<p><a href="{% url 'logout' %}">Chiqib ketish</a></p>
+{% else %}
+ <p>
+    <a href="{% url 'login' %}">Saytga kirish</a> |
+    <a href="{% url 'signup' %}">Ro'yxatdan o'tish</a>
+  </p>
+
+{% endif %}
+
+<div class="container">
+  {% block content %}
+  {% endblock %}
+</div>
+
+<div class="main-section">
+    {% if main_image %}
+        <img src="{{ main_image.url }}" alt="Main Section Image" class="main-image">
+    {% endif %}
+</div>
+
+
+<footer class="site-footer">
+  <h2><a href="{% url 'post_new' %}" class="yangi">✍️ Yangi post yozish</a></h2>
+</footer>
+<script>
+  const toggleBtn = document.getElementById('themeToggle');
+  const icon = toggleBtn.querySelector('i');
+
+  toggleBtn.onclick = () => {
+    document.body.classList.toggle('light');
+
+    if (document.body.classList.contains('light')) {
+      icon.classList.remove('fa-sun');
+      icon.classList.add('fa-moon');
+    } else {
+      icon.classList.remove('fa-moon');
+      icon.classList.add('fa-sun');
+    }
+  };
+</script>
+
+
+</body>
+</html>

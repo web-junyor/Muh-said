@@ -166,5 +166,33 @@
     "action": "delete_user",
     "template": "admin",
     "timestamp": "2026-01-21 02:18:17.693243"
+  },
+  {
+    "user_id": 2109017495,
+    "username": "MidDev_official",
+    "action": "add_user",
+    "template": "\u21a9\ufe0f Orqaga",
+    "timestamp": "2026-01-25 23:08:38.962308"
+  },
+  {
+    "user_id": 2109017495,
+    "username": "MidDev_official",
+    "action": "RMO",
+    "template": "Tushuntirish xati RMO.docx",
+    "timestamp": "2026-01-25 23:37:45.253955"
+  },
+  {
+    "user_id": 2109017495,
+    "username": "MidDev_official",
+    "action": "RMO",
+    "template": "Tushuntirish xati RMO.docx",
+    "timestamp": "2026-01-25 23:41:20.218681"
+  },
+  {
+    "user_id": 2109017495,
+    "username": "MidDev_official",
+    "action": "missing_days",
+    "template": "missing_days_uz",
+    "timestamp": "2026-01-25 23:46:00.477529"
   }
 ]

@@ -9,6 +9,7 @@ from docx import Document
 from aiogram.types import FSInputFile
 import asyncio
 import logging
+from datetime import time
 
 # Logging
 logging.basicConfig(level=logging.INFO)
@@ -35,10 +36,22 @@ TEMPLATES = {
     "missing_days_ru": os.path.join(BASE_DIR, "Объяснительная.docx"),
     "response_uz": os.path.join(BASE_DIR, "Tushuntirish xati J.docx"),
     "response_ru": os.path.join(BASE_DIR, "Объяснительная J.docx"),
+    "rmo_uz": os.path.join(BASE_DIR, "Tushuntirish xati RMO.docx"),
+    "rmo_ru": os.path.join(BASE_DIR, "Объяснительная RMO.docx"),
     "late_uz": os.path.join(BASE_DIR, "Tushuntirish xati Grafik.docx"),
     "late_ru": os.path.join(BASE_DIR, "Объяснительная График.docx"),
     "explanation": os.path.join(BASE_DIR, "Tushuntirish xati2026.docx"),
 }
+
+def format_time(value: int, unit: str) -> str:
+    if unit == "minute":
+        t = time(minute=value)
+        return t.strftime("%H:%M")
+    elif unit == "hour":
+        t = time(hour=value)
+        return t.strftime("%H:%M")
+    return "00:00"
+
 
 # ===== USERS DATABASE =====
 def init_users_db():
@@ -153,6 +166,15 @@ class MissingDaysForm(StatesGroup):
     sabab = State()
     sana_chiq = State()
     sana = State()
+
+class Form(StatesGroup):
+    # ... eski state’lar qoladi
+
+    rmo_name = State()
+    rmo_day = State()
+    rmo_time_unit = State()
+    rmo_time_value = State()
+    rmo_date = State()
 
 class ResponseForm(StatesGroup):
     fish = State()
@@ -308,6 +330,138 @@ async def response_start(msg: Message, state: FSMContext):
     await msg.answer(text)
     await state.set_state(ResponseForm.fish)
 
+@router.message(F.text.regexp(r"🕒 RMO"))
+async def rmo_start(msg: Message, state: FSMContext):
+    data = await state.get_data()
+    lang = data.get("lang", "uz")
+
+    text = (
+        "👤 F.I.SH kiriting:"
+        if lang == "uz"
+        else "👤 Введите ФИО:"
+    )
+    await msg.answer(text)
+    await state.set_state(Form.rmo_name)
+@router.message(Form.rmo_name)
+async def rmo_name(msg: Message, state: FSMContext):
+    await state.update_data(name=msg.text)
+
+    data = await state.get_data()
+    lang = data.get("lang", "uz")
+
+    text = (
+        "📅 RMO o‘z vaqtida yoqilmagan kunni kiriting:"
+        if lang == "uz"
+        else "📅 Укажите день, когда RMO не был включён вовремя:"
+    )
+    await msg.answer(text)
+    await state.set_state(Form.rmo_day)
+@router.message(Form.rmo_day)
+async def rmo_day(msg: Message, state: FSMContext):
+    await state.update_data(rmo_day=msg.text)
+
+    kb = ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text="⏱ Minut"), KeyboardButton(text="⏱ Soat")]
+        ],
+        resize_keyboard=True
+    )
+
+    data = await state.get_data()
+    lang = data.get("lang", "uz")
+
+    text = (
+        "⏳ Qancha kechikdi?"
+        if lang == "uz"
+        else "⏳ Насколько опоздал?"
+    )
+    await msg.answer(text, reply_markup=kb)
+    await state.set_state(Form.rmo_time_unit)
+@router.message(Form.rmo_time_unit)
+async def rmo_time_unit(msg: Message, state: FSMContext):
+    if "Minut" in msg.text:
+        unit = "minute"
+    elif "Soat" in msg.text:
+        unit = "hour"
+    else:
+        await msg.answer("❌ Tugmadan tanlang")
+        return
+
+    await state.update_data(rmo_time_unit=unit)
+    await msg.answer("🔢 Son kiriting (masalan: 7):")
+    await state.set_state(Form.rmo_time_value)
+@router.message(Form.rmo_time_value)
+async def rmo_time_value(msg: Message, state: FSMContext):
+    if not msg.text.isdigit():
+        await msg.answer("❌ Faqat son kiriting")
+        return
+
+    data = await state.get_data()
+    formatted = format_time(int(msg.text), data["rmo_time_unit"])
+
+    await state.update_data(rmo_time=formatted)
+
+    lang = data.get("lang", "uz")
+    text = (
+        "📄 Hujjat yozilgan sanani kiriting:"
+        if lang == "uz"
+        else "📄 Введите дату документа:"
+    )
+    await msg.answer(text)
+    await state.set_state(Form.rmo_date)
+@router.message(Form.rmo_date)
+async def rmo_finish(msg: Message, state: FSMContext):
+    await state.update_data(rmo_date=msg.text)
+    data = await state.get_data()
+
+    lang = data.get("lang", "uz")
+    template = (
+        TEMPLATES["rmo_uz"]
+        if lang == "uz"
+        else TEMPLATES["rmo_ru"]
+    )
+
+    if not os.path.exists(template):
+        await msg.answer("❌ RMO shablon topilmadi")
+        await state.clear()
+        return
+
+    doc = Document(template)
+
+    replace_map = {
+        "(FISH)": data["name"],
+        "(kun k)": data["rmo_day"],
+        "(minut)": data["rmo_time"],   # 00:05 / 05:00
+        "(sana5)": data["rmo_date"],
+    }
+
+    # TEXT ALMASHTIRISH
+    for p in doc.paragraphs:
+        for k, v in replace_map.items():
+            if k in p.text:
+                for r in p.runs:
+                    r.text = r.text.replace(k, v)
+
+    for t in doc.tables:
+        for row in t.rows:
+            for cell in row.cells:
+                for p in cell.paragraphs:
+                    for k, v in replace_map.items():
+                        if k in p.text:
+                            for r in p.runs:
+                                r.text = r.text.replace(k, v)
+
+    out_path = os.path.join(OUT_DIR, f"RMO_{msg.from_user.id}.docx")
+    doc.save(out_path)
+
+    await msg.answer_document(
+        FSInputFile(out_path),
+        caption="✅ RMO hujjat tayyor \n\n📝 Imzo qo'ysez bo'ldi!"
+    )
+
+    await state.clear()
+
+
 @router.message(F.text.regexp(r"4\. (Kechga qolish|Опоздание)"))
 async def late_start(msg: Message, state: FSMContext):
     data = await state.get_data()
@@ -324,12 +478,108 @@ async def explanation_start(msg: Message, state: FSMContext):
     await msg.answer(text)
     await state.set_state(ExplanationForm.fish)
 
+# ===== RMO STATES =====
+class RMOForm(StatesGroup):
+    fish = State()
+    kun = State()
+    vaqt_turi = State()
+    vaqt_son = State()
+    sana = State()
+
+# ===== RMO START =====
 @router.message(F.text.regexp(r"3\. (RMO|РМО)"))
 async def rmo_start(msg: Message, state: FSMContext):
     data = await state.get_data()
     lang = data.get("lang", "uz")
-    text = "📋 RMO bo'limi\n\nHali tayyor emas." if lang == "uz" else "📋 Раздел РМО\n\nЕщё не готово."
+
+    text = (
+        "📄 RMO bo‘limi\n\nF.I.SH kiriting:"
+        if lang == "uz"
+        else "📄 Раздел РМО\n\nВведите ФИО:"
+    )
     await msg.answer(text)
+    await state.set_state(RMOForm.fish)
+
+@router.message(RMOForm.fish)
+async def rmo_fish(msg: Message, state: FSMContext):
+    await state.update_data(fish=msg.text)
+    await msg.answer("📅 RMO yoqilmagan kunni kiriting:")
+    await state.set_state(RMOForm.kun)
+
+@router.message(RMOForm.kun)
+async def rmo_kun(msg: Message, state: FSMContext):
+    await state.update_data(kun=msg.text)
+
+    kb = ReplyKeyboardMarkup(
+        keyboard=[[KeyboardButton(text="⏱ Minut"), KeyboardButton(text="⏱ Soat")]],
+        resize_keyboard=True
+    )
+    await msg.answer("⏰ Qancha vaqt?", reply_markup=kb)
+    await state.set_state(RMOForm.vaqt_turi)
+
+@router.message(RMOForm.vaqt_turi)
+async def rmo_vaqt_turi(msg: Message, state: FSMContext):
+    if msg.text not in ["⏱ Minut", "🕐 Soat"]:
+        await msg.answer("❌ Tugmalardan birini tanlang.")
+        return
+
+    await state.update_data(vaqt_turi=msg.text)
+    await msg.answer("🔢 Son kiriting (masalan: 5):")
+    await state.set_state(RMOForm.vaqt_son)
+
+@router.message(RMOForm.vaqt_son)
+async def rmo_vaqt_son(msg: Message, state: FSMContext):
+    if not msg.text.isdigit():
+        await msg.answer("❌ Faqat son kiriting.")
+        return
+
+    data = await state.get_data()
+    son = int(msg.text)
+
+    if "Minut" in data["vaqt_turi"]:
+        vaqt = f"00:{son:02d}"
+    else:
+        vaqt = f"{son:02d}:00"
+
+    await state.update_data(minut=vaqt)
+    await msg.answer("📆 Hujjat yozilgan sana (DD.MM.YYYY):")
+    await state.set_state(RMOForm.sana)
+
+@router.message(RMOForm.sana)
+async def rmo_finish(msg: Message, state: FSMContext):
+    data = await state.get_data()
+
+    template_path = os.path.join(BASE_DIR, "Tushuntirish xati RMO.docx")
+    if not os.path.exists(template_path):
+        await msg.answer("❌ RMO template topilmadi.")
+        await state.clear()
+        return
+
+    doc = Document(template_path)
+
+    replace_map = {
+        "(FISH)": data.get("fish", ""),
+        "(kun k)": data.get("kun", ""),
+        "(minut)": data.get("minut", ""),
+        "(sana5)": msg.text
+    }
+
+    replace_placeholders_in_doc(doc, replace_map)
+
+    filename = f"RMO_{msg.from_user.id}.docx"
+    out_path = os.path.join(OUTPUT_DIR, filename)
+    doc.save(out_path)
+
+    await msg.answer_document(
+        FSInputFile(out_path),
+        caption="✅ RMO hujjat tayyor! \n\n📝 Imzo qo'ysez bo'ldi!"
+    )
+
+    add_log(msg.from_user.id, msg.from_user.username, "RMO", "Tushuntirish xati RMO.docx")
+
+    await state.clear()
+    await show_menu(msg, state)
+
 
 # ===== MISSING DAYS FORM (Yangi) =====
 @router.message(MissingDaysForm.fish)

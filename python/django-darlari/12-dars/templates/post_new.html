@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="form-page">
+  <h1 class="form-title">✍️ Yangi post yozish</h1>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+<button type="submit">💾 Saqlash</button>
+    <div class="form-actions">
+      <a href="{% url 'home' %}" class="btn ghost">Bekor qilish</a>
+    </div>
+  </form>
+</section>
+{% endblock %}
