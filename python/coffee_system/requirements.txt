@@ -1,0 +1,43 @@
+# Telegram Bot Framework
+aiogram==3.4.1
+aiohttp==3.9.1
+
+# Web Framework (Loveble webhooks uchun)
+Flask==3.0.0
+flask-cors==4.0.0
+
+# API requests
+requests==2.31.0
+httpx==0.25.2
+
+# Database
+SQLAlchemy==2.0.23
+pydantic==2.6.4
+
+# Scheduling (Kunlik, haftalik, oylik diagnostika)
+APScheduler==3.10.4
+pytz==2023.3.post1
+
+# Data processing
+python-dateutil==2.8.2
+pyyaml==6.0.1
+
+# Environment variables
+python-dotenv==1.0.0
+
+# Logging and monitoring
+python-json-logger==2.0.7
+
+# Development tools
+pytest==7.4.3
+pytest-asyncio==0.21.1
+
+# Production server (deployment uchun)
+gunicorn==21.2.0
+gevent==23.9.1
+
+# Security
+cryptography==41.0.7
+
+# Data validation
+marshmallow==3.20.1

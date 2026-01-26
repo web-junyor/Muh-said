@@ -1,0 +1,245 @@
+{
+  "bot_integration_request": {
+    "bot_name": "Coffee Shop Management Bot",
+    "language": "Uzbek",
+    "created_date": "2026-01-27",
+    "status": "Ready for Loveble Integration",
+
+    "what_bot_does": {
+      "real_time_notifications": "Telegram da sotuv xabari (2 sekundda)",
+      "daily_diagnostics": "Har kun soat 23:00 da kunlik hisobot",
+      "weekly_report": "Har juma soat 23:05 da haftalik hisobot",
+      "monthly_report": "Har oy 1-kuni soat 23:10 da oylik hisobot",
+      "stock_tracking": "Mahsulotlarning qoldig'ini kuzatish"
+    },
+
+    "webhook_requirements": {
+      "webhook_url": "http://YOUR_SERVER_IP:8443/webhook/loveble",
+      "webhook_port": 8443,
+      "webhook_path": "/webhook/loveble",
+      "request_method": "POST",
+      "content_type": "application/json",
+      "signature_header": "X-Loveble-Signature",
+      "signature_algorithm": "HMAC-SHA256",
+      "signature_encoding": "hexadecimal"
+    },
+
+    "required_events": [
+      {
+        "event_type": "order_paid",
+        "description": "When customer paid for order",
+        "required": true,
+        "process_by_bot": true
+      },
+      {
+        "event_type": "order_completed",
+        "description": "When order is completed",
+        "required": true,
+        "process_by_bot": true
+      },
+      {
+        "event_type": "order_created",
+        "description": "When order is created (before payment)",
+        "required": false,
+        "process_by_bot": false
+      }
+    ],
+
+    "required_from_loveble": [
+      "shop_id",
+      "api_key",
+      "webhook_secret",
+      "product_ids (8 items)",
+      "test_webhook_capability"
+    ],
+
+    "webhook_payload_format": {
+      "event_type": "order_paid or order_completed",
+      "order_id": "string - ORD-20260127-001",
+      "shop_id": "string - shop ID from Loveble",
+      "timestamp": "ISO 8601 - 2026-01-27T14:30:45",
+      "items": [
+        {
+          "product_id": "string - product ID from Loveble",
+          "product_name": "string - Cappuccino",
+          "quantity": "number - 2",
+          "price": "number - 7000 (som per unit)",
+          "total_price": "number - 14000 (quantity * price)"
+        }
+      ],
+      "total_amount": "number - sum of all items",
+      "payment_status": "string - paid/completed",
+      "payment_method": "string - card/cash",
+      "customer_phone": "optional string - +998901234567"
+    },
+
+    "webhook_header_example": {
+      "Content-Type": "application/json",
+      "X-Loveble-Signature": "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0"
+    },
+
+    "products": [
+      {
+        "bot_name": "Espresso",
+        "bot_id": "1",
+        "price": 5000,
+        "initial_stock": 12,
+        "loveble_id": "FIND_IN_LOVEBLE_PRODUCTS"
+      },
+      {
+        "bot_name": "Cappuccino",
+        "bot_id": "2",
+        "price": 7000,
+        "initial_stock": 12,
+        "loveble_id": "FIND_IN_LOVEBLE_PRODUCTS"
+      },
+      {
+        "bot_name": "Latte",
+        "bot_id": "3",
+        "price": 8000,
+        "initial_stock": 12,
+        "loveble_id": "FIND_IN_LOVEBLE_PRODUCTS"
+      },
+      {
+        "bot_name": "Americano",
+        "bot_id": "4",
+        "price": 6000,
+        "initial_stock": 12,
+        "loveble_id": "FIND_IN_LOVEBLE_PRODUCTS"
+      },
+      {
+        "bot_name": "Flat White",
+        "bot_id": "5",
+        "price": 8500,
+        "initial_stock": 12,
+        "loveble_id": "FIND_IN_LOVEBLE_PRODUCTS"
+      },
+      {
+        "bot_name": "Macchiato",
+        "bot_id": "6",
+        "price": 7500,
+        "initial_stock": 12,
+        "loveble_id": "FIND_IN_LOVEBLE_PRODUCTS"
+      },
+      {
+        "bot_name": "Mocha",
+        "bot_id": "7",
+        "price": 9000,
+        "initial_stock": 12,
+        "loveble_id": "FIND_IN_LOVEBLE_PRODUCTS"
+      },
+      {
+        "bot_name": "Affogato",
+        "bot_id": "8",
+        "price": 9000,
+        "initial_stock": 12,
+        "loveble_id": "FIND_IN_LOVEBLE_PRODUCTS"
+      }
+    ],
+
+    "webhook_payload_example": {
+      "event_type": "order_paid",
+      "order_id": "ORD-20260127-001",
+      "shop_id": "shop_123456",
+      "timestamp": "2026-01-27T14:30:45",
+      "items": [
+        {
+          "product_id": "prod_cappuccino_abc123",
+          "product_name": "Cappuccino",
+          "quantity": 2,
+          "price": 7000,
+          "total_price": 14000
+        }
+      ],
+      "total_amount": 14000,
+      "payment_status": "paid",
+      "payment_method": "card",
+      "customer_phone": "+998901234567"
+    },
+
+    "bot_response": {
+      "on_success": {
+        "status_code": 200,
+        "response_body": {
+          "status": "ok",
+          "message": "Webhook processed"
+        }
+      },
+      "on_failure": {
+        "status_code": 400,
+        "response_body": {
+          "status": "error",
+          "message": "Error message"
+        }
+      },
+      "on_signature_error": {
+        "status_code": 401,
+        "response_body": {
+          "status": "error",
+          "message": "Invalid signature"
+        }
+      }
+    },
+
+    "telegram_admin_notification": {
+      "on_sale": "☕ SOTUV HAQIDA XABAR\n📦 Cappuccino × 2\n💰 14,000 som\n🧾 Chek ID: ORD-001\n⏰ Vaqt: 14:30:45",
+      "daily_report": "📊 KUNLIK DIAGNOSTIKA\n📈 Bugun:\n• Jami sotuvlar: 15 ta\n• Daromad: 125,000 som\n• Cappuccino: 5 ta (qoldig'i: 7)\n... va boshqalar",
+      "weekly_report": "📈 HAFTALIK DIAGNOSTIKA\n• Jami sotuvlar: 87 ta\n• Daromad: 612,500 som",
+      "monthly_report": "📅 OYLIK DIAGNOSTIKA\n• Jami sotuvlar: 400 ta\n• Daromad: 2,500,000 som"
+    },
+
+    "security": {
+      "signature_verification": "HMAC-SHA256 with Loveble webhook secret",
+      "admin_authentication": "Telegram admin ID validation",
+      "database_safety": "SQLite transaction with rollback on error",
+      "logging": "All requests logged in coffee_bot.log"
+    },
+
+    "checklist_for_loveble": [
+      "Webhook URL o'rnatildi",
+      "Webhook secret yaratildi",
+      "order_paid event aktiv",
+      "order_completed event aktiv",
+      "X-Loveble-Signature header yuboriladi",
+      "8 ta mahsulot ID nomi",
+      "API key berish",
+      "Shop ID berish",
+      "Test webhook imkoniyati"
+    ],
+
+    "next_steps": {
+      "step_1": "Loveble AI'dan shop_id olish",
+      "step_2": "Loveble AI'dan api_key olish",
+      "step_3": "Loveble AI'dan webhook_secret olish",
+      "step_4": "Loveble AI'dan 8 product ID olish",
+      "step_5": "Webhook URL'ni Loveble'da o'rnatish",
+      "step_6": "Test webhook yuborish",
+      "step_7": "config.py'da ma'lumotlarni to'ldirish",
+      "step_8": "python main.py bilan botni ishga tushirish",
+      "step_9": "Loveble POS'da test sotuv qilish",
+      "step_10": "Telegram'da xabar keltirilishini tekshirish"
+    },
+
+    "contact_info": {
+      "bot_owner": "Muh-said",
+      "telegram_admin_id": 5995404792,
+      "creation_date": "2026-01-27",
+      "bot_version": "1.0.0",
+      "framework": "aiogram 3.4.1 (Telegram) + Flask (Webhooks)",
+      "database": "SQLite3",
+      "scheduler": "APScheduler"
+    },
+
+    "documentation": {
+      "uzbek_guide": "LOVEBLE_UZBEKCHA.md",
+      "english_setup": "LOVEBLE_SETUP.md",
+      "quick_start": "LOVEBLE_QUICK_START.md",
+      "examples": "LOVEBLE_EXAMPLES.md",
+      "complete_manual": "LOVEBLE_INTEGRATION.md",
+      "admin_guide": "LOVEBLE_ADMIN.md"
+    },
+
+    "status": "✅ Ready for Loveble Integration",
+    "ready_to_deploy": true
+  }
+}
