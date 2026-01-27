@@ -1,0 +1,4 @@
+2026-01-27 19:09:17,553 - INFO - Polling stopped
+2026-01-27 19:09:17,668 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-01-27 19:09:17,670 - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8437143053)
+2026-01-27 19:09:17,970 - INFO - Polling stopped for bot @coffee_diagnostlar_bot id=8437143053 - 'coffee_diagnost'
