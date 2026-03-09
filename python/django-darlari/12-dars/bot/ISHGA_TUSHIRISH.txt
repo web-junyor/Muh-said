@@ -1,0 +1,17 @@
+BOTNI ISHGA TUSHIRISH
+=====================
+
+1. Avval Django ishlab turgan bo'lsin (12-dars papkasida: run.ps1 yoki python manage.py runserver 127.0.0.1:8001)
+
+2. Botni faqat shu papkadan (bot) ishga tushiring:
+   - Oynada: cd 12-dars\bot
+   - Keyin: python main.py
+
+   Yoki 12-dars papkasida: .\run.ps1  (Django va botni birga ishga tushiradi)
+
+3. Telegramda botni oching va /start yuboring.
+   Ostida 2 ta tugma chiqishi kerak:
+   - Yangi blog yozish
+   - Bloglar tarixi
+
+4. Agar tugmalar ko'rinmasa: botni to'xtatib (Ctrl+C), qayta python main.py qiling.

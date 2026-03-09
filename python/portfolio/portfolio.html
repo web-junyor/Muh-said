@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="pageTitle">Muhammad Said — Junior Developer | Portfolio</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<style>/* ===== Portfolio — Liquid Glass, 3 til, Kun/Tun rejimi ===== */
+
+/* ----- Tun (dark) — default ----- */
+:root,
+body.theme-dark {
+  --bg: linear-gradient(165deg, #0f0e17 0%, #1a1a2e 25%, #16213e 55%, #0f3460 100%);
+  --text: #fffcf8;
+  --text-soft: rgba(255, 252, 248, 0.92);
+  --milk: rgba(255, 252, 248, 0.92);
+  --milk-solid: #fffcf8;
+  --glass-bg: rgba(255, 252, 248, 0.28);
+  --glass-border: rgba(255, 252, 248, 0.45);
+  --gold: #c9a227;
+  --gold-soft: rgba(218, 165, 32, 0.9);
+  --gold-ornament: rgba(184, 134, 11, 0.65);
+  --btn-bg: #fffcf8;
+  --btn-text: #1a1a2e;
+  --header-bg: rgba(255, 252, 248, 0.18);
+  --header-border: rgba(255, 252, 248, 0.35);
+}
+
+/* ----- Kun (light) ----- */
+body.theme-light {
+  --bg: linear-gradient(160deg, #e8e4df 0%, #d4cfc8 40%, #c9c4bc 100%);
+  --text: #1a1a2e;
+  --text-soft: rgba(26, 26, 46, 0.9);
+  --milk: rgba(26, 26, 46, 0.88);
+  --milk-solid: #1a1a2e;
+  --glass-bg: rgba(255, 252, 248, 0.65);
+  --glass-border: rgba(255, 252, 248, 0.85);
+  --gold: #8b6914;
+  --gold-soft: rgba(139, 105, 20, 0.9);
+  --gold-ornament: rgba(139, 105, 20, 0.55);
+  --btn-bg: #fffcf8;
+  --btn-text: #1a1a2e;
+  --header-bg: rgba(255, 252, 248, 0.75);
+  --header-border: rgba(184, 134, 11, 0.25);
+}
+
+:root {
+  --blur: 20px;
+  --radius: 24px;
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Source Sans 3', sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  font-weight: 400;
+  color: var(--text);
+  background: var(--bg);
+  background-attachment: fixed;
+}
+
+/* ----- Veb-sayt sarlavha ----- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  margin: 0 auto 1.5rem;
+  max-width: 720px;
+  border-radius: var(--radius);
+  background: var(--header-bg);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  border: 1px solid var(--header-border);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 0.9rem 1.25rem;
+}
+
+.site-name {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.site-name:hover {
+  color: var(--gold-soft);
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.lang-switcher,
+.theme-switcher {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.lang-btn,
+.theme-btn {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 252, 248, 0.25);
+  color: var(--text);
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.lang-btn:first-child { border-radius: 10px 0 0 10px; }
+.lang-btn:last-child { border-radius: 0 10px 10px 0; }
+.lang-btn + .lang-btn { margin-left: -1px; }
+
+.lang-btn:hover,
+.theme-btn:hover {
+  background: rgba(255, 252, 248, 0.4);
+}
+
+.lang-btn.active,
+.theme-btn.active {
+  background: var(--gold-soft);
+  color: #fff;
+  border-color: var(--gold-soft);
+}
+
+.theme-btn {
+  border-radius: 10px;
+  margin-left: 0.25rem;
+}
+
+.theme-btn i {
+  margin-right: 0.35rem;
+}
+
+.theme-label {
+  display: none;
+}
+
+@media (min-width: 480px) {
+  .theme-label { display: inline; }
+}
+
+.page-wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 1.25rem 4rem;
+  position: relative;
+}
+
+/* ----- Tilla ornament -----
+.ornament-left,
+.ornament-right {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  pointer-events: none;
+  z-index: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    var(--gold-ornament) 8%,
+    var(--gold-ornament) 12%,
+    transparent 20%,
+    transparent 80%,
+    var(--gold-ornament) 88%,
+    var(--gold-ornament) 92%,
+    transparent 100%
+  );
+  opacity: 0.85;
+}
+
+.ornament-left { left: 12px; border-radius: 2px; box-shadow: 0 0 12px var(--gold-ornament); }
+.ornament-right { right: 12px; border-radius: 2px; box-shadow: 0 0 12px var(--gold-ornament); } */
+
+/* ----- Bo'limlar (Liquid Glass) ----- */
+.section {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 1.75rem;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  transition: box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+  box-shadow: 0 14px 48px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  border-radius: var(--radius) 0 0 var(--radius);
+  background: linear-gradient(180deg, transparent, var(--gold-ornament) 15%, var(--gold-soft) 50%, var(--gold-ornament) 85%, transparent);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.glass-card::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  background: linear-gradient(180deg, transparent, var(--gold-ornament) 15%, var(--gold-soft) 50%, var(--gold-ornament) 85%, transparent);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.glass-inner {
+  padding: 2.1rem 1.85rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* ----- Hero ----- */
+#hero .glass-inner {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  text-align: center;
+}
+
+.hero-badge {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+  margin: 0 0 0.5rem;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.1rem, 6vw, 3.2rem);
+  font-weight: 700;
+  color: var(--milk-solid);
+  margin: 0 0 0.4rem;
+  letter-spacing: 0.02em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.hero-subtitle {
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--milk);
+  margin: 0;
+  opacity: 0.95;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  font-weight: 600;
+  color: var(--milk-solid);
+  margin: 0 0 1.5rem;
+  padding-bottom: 0.6rem;
+  letter-spacing: 0.02em;
+  position: relative;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 48px;
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--gold-soft), transparent);
+  opacity: 0.85;
+}
+
+/* ----- Men haqimda — kengaytirilgan ----- */
+.about-block {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.about-text {
+  font-size: 1.06rem;
+  line-height: 1.75;
+  color: var(--milk);
+  margin: 0;
+}
+
+.about-text strong {
+  color: var(--milk-solid);
+  font-weight: 600;
+}
+
+.about-block .about-text:nth-child(2) {
+  padding: 1rem 1.1rem;
+  border-radius: 14px;
+  background: rgba(218, 165, 32, 0.08);
+  border-left: 3px solid var(--gold-soft);
+}
+
+.skills-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem 1.15rem;
+}
+
+.skills-list li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 1.02rem;
+  font-weight: 500;
+  color: var(--milk);
+  padding: 0.6rem 1rem;
+  border-radius: 14px;
+  background: rgba(255, 252, 248, 0.18);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.skills-list li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 252, 248, 0.25);
+}
+
+.skills-list li i {
+  color: var(--gold-soft);
+  font-size: 1.15rem;
+}
+
+.glass-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.9rem 1.35rem;
+  font-family: var(--font-body);
+  font-size: 1.02rem;
+  font-weight: 500;
+  color: var(--btn-text);
+  text-decoration: none;
+  border-radius: 18px;
+  background: var(--btn-bg);
+  border: 1px solid rgba(255, 252, 248, 0.75);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 4px 22px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.glass-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+.glass-btn:focus-visible {
+  outline: 2px solid var(--gold-soft);
+  outline-offset: 2px;
+}
+
+.glass-btn i {
+  font-size: 1.15rem;
+  color: var(--btn-text);
+  opacity: 0.9;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+  gap: 1.1rem;
+}
+
+.project-card {
+  min-height: 54px;
+  transition: transform 0.25s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-3px);
+}
+
+.contact-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.contact-btn { min-width: 140px; }
+
+@media (max-width: 480px) {
+  .page-wrap { padding-left: 1rem; padding-right: 1rem; }
+  .ornament-left { left: 6px; }
+  .ornament-right { right: 6px; }
+  .glass-inner { padding: 1.5rem 1.25rem; }
+  #hero .glass-inner { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+  .projects-grid { grid-template-columns: 1fr; }
+  .header-inner { padding: 0.75rem 1rem; }
+  .site-name { font-size: 1.1rem; }
+}
+</style>
+<body>
+  <!-- Veb-sayt sarlavha: til + kun/tun -->
+  <!-- <header class="site-header glass-card"> -->
+    <div class="header-inner">
+      <a href="#hero" class="site-name">Muhammad Said</a>
+      <nav class="header-nav">
+        <div class="lang-switcher" role="group" aria-label="Tilni tanlash">
+          <button type="button" class="lang-btn active" data-lang="uz" aria-pressed="true">UZ</button>
+          <button type="button" class="lang-btn" data-lang="ru" aria-pressed="false">RU</button>
+          <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+        <div class="theme-switcher" role="group" aria-label="Kun yoki tun rejimi">
+          <button type="button" class="theme-btn" data-theme="light" title="Kun">
+            <i class="fa fa-sun" aria-hidden="true"></i>
+            <span class="theme-label" data-i18n="themeDay">Kun</span>
+          </button>
+          <button type="button" class="theme-btn" data-theme="dark" title="Tun">
+            <i class="fa fa-moon" aria-hidden="true"></i>
+            <span class="theme-label" data-i18n="themeNight">Tun</span>
+          </button>
+        </div>
+      </nav>
+    </div>
+  <!-- </header> -->
+
+  <div class="page-wrap">
+    <div class="ornament-left" aria-hidden="true"></div>
+    <div class="ornament-right" aria-hidden="true"></div>
+
+    <!-- 1. HERO -->
+    <section id="hero" class="section glass-card">
+      <div class="glass-inner">
+        <p class="hero-badge" data-i18n="heroBadge">Junior Developer</p>
+        <h1 class="hero-title">Muhammad Said</h1>
+        <p class="hero-subtitle" data-i18n="heroSubtitle">Portfolio — Toshkent, O'zbekiston</p>
+      </div>
+    </section>
+
+    <!-- 2. MEN HAQIMDA -->
+    <section id="about" class="section glass-card">
+      <div class="glass-inner">
+        <h2 class="section-title" data-i18n="aboutTitle">Men haqimda</h2>
+        <div class="about-block">
+          <p class="about-text" data-i18n="aboutIntro">
+            <strong>15 yosh</strong>, O'zbekiston, Toshkent shahar, Olmazor tumanida yashayman.
+            Dasturlash va veb-ishlab chiqishga qiziqaman. Sun'iy intellekt bo'yicha tajriba ortirishni yaxshi ko'raman. Tillar: <strong>Ingliz tili</strong> — Elementar darajada,
+            <strong>Rus tili</strong> — Элементарный уровень.
+          </p>
+          <p class="about-text" data-i18n="aboutInterest">
+            Menga <strong>Sun'iy intellekt (AI)</strong> va avtomatlashtirish juda yoqadi. Kelajakda AI va machine learning bo‘yicha loyihalar qilishni, chatbotlar va aqlli tizimlar yaratishni xohlayman. Hozircha Telegram botlar, veb-saytlar va kalkulyator kabi loyihalar bilan shug‘ullanaman.
+          </p>
+          <p class="about-text" data-i18n="aboutGoal">
+            Maqsadim — har kuni yangi narsa o‘rganib, professional dasturchi bo‘lish va AI sohasida tajriba orttirish.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. BILIMLAR -->
+    <section id="skills" class="section glass-card">
+      <div class="glass-inner">
+        <h2 class="section-title" data-i18n="skillsTitle">Bilimlar</h2>
+        <ul class="skills-list">
+          <a href="web.html"><li><i class="fa-brands fa-html5"></i> HTML</li></a>
+          <a href="web.html"><li><i class="fa-brands fa-css3-alt"></i> CSS</li></a>
+           <a href="web.html"><li><i class="fa-brands fa-js"></i> JavaScript</li></a>
+          <a href="https://t.me/cyr17lat_bot"><li><i class="fa-brands fa-python"></i> Python</li></a>
+          <a href="http://localhost:8001/"><li><i class="fa fa-server"></i> Django</li></a>
+         <a href="https://muhammaddiv.lovable.app"><li><i class="fa fa-code"></i> Vayb koding</li></a>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 4. LOYIHALAR -->
+    <section id="projects" class="section glass-card">
+      <div class="glass-inner">
+        <h2 class="section-title" data-i18n="projectsTitle">Loyihalar</h2>
+        <div class="projects-grid">
+          <a class="project-card glass-btn" href="https://t.me/tushuntirish_xati_bot" target="_blank" rel="noopener" aria-label="Telegram bot 2">
+            <i class="fa-brands fa-telegram"></i>
+            <span>Telegram bot 2 jamo bilan qilingan</span>
+          </a>
+          <a class="project-card glass-btn" href="https://t.me/cyr17lat_bot" target="_blank" rel="noopener" aria-label="Telegram bot 1">
+            <i class="fa-brands fa-telegram"></i>
+            <span>Telegram bot 1</span>
+          </a>
+           <a class="project-card glass-btn" href="http://localhost:8001/" target="_blank" rel="noopener">
+            <i class="fa fa-database"></i>
+            <span>Django Project</span>
+          </a>
+          <a class="project-card glass-btn" href="https://muhammad17.lovable.app" target="_blank" rel="noopener">
+            <i class="fa fa-mug-hot"></i>
+            <span>Coffee Shop</span>
+          </a>
+          <a class="project-card glass-btn" href="https://muhammaddiv.lovable.app" target="_blank" rel="noopener">
+            <i class="fa fa-robot"></i>
+            <span>AI Project</span>
+          </a>
+          <a class="project-card glass-btn" href="https://codepen.io/K115/pen/OPMdGoa" target="_blank" rel="noopener">
+            <i class="fa fa-calculator"></i>
+            <span>Calculator</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. BOG'LANISH -->
+    <section id="contact" class="section glass-card">
+      <div class="glass-inner">
+        <h2 class="section-title" data-i18n="contactTitle">Bog'lanish</h2>
+        <div class="contact-links">
+          <a class="contact-btn glass-btn" href="tel:+998908106443" aria-label="Telefon">
+            <i class="fa fa-phone"></i>
+            <span>+998 90 810 64 43</span>
+          </a>
+          <a class="contact-btn glass-btn" href="https://t.me/MidDev_official" target="_blank" rel="noopener" aria-label="Telegram">
+            <i class="fa-brands fa-telegram"></i>
+            <span>Telegram</span>
+          </a>
+          <a class="contact-btn glass-btn" href="https://instagram.com/dev7senior" target="_blank" rel="noopener" aria-label="Instagram">
+            <i class="fa-brands fa-instagram"></i>
+            <span>Instagram</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>/**
+ * Portfolio — 3 til (UZ, RU, EN), kun/tun rejimi, veb-sayt
+ */
+
+(function () {
+  var translations = {
+    uz: {
+      pageTitle: 'Muhammad Said — Junior Developer | Portfolio',
+      heroBadge: 'Junior Developer',
+      heroSubtitle: "Portfolio — Toshkent, O'zbekiston",
+      aboutTitle: "Men haqimda",
+      aboutIntro: "<strong>15 yosh</strong>, O'zbekiston, Toshkent shahar, Olmazor tumanida yashayman. Dasturlash va SI chiqishga qiziqaman. Sun'iy intellekt bo'yicha tajriba ortirishni yaxshi ko'raman. Tillar: <strong>Ingliz tili</strong> — Elementar daraja, <strong>Rus tili</strong> — Элементарный уровень.",
+      aboutInterest: "Menga <strong>Sun'iy intellekt (AI)</strong> va avtomatlashtirish juda yoqadi. Kelajakda AI va machine learning bo'yicha loyihalar qilishni, chatbotlar va aqlli tizimlar yaratishni xohlayman. Hozircha Telegram botlar, veb-saytlar va kalkulyator kabi loyihalar bilan shug'ullanaman.",
+      aboutGoal: "Maqsadim — har kuni yangi narsa o'rganib, professional dasturchi bo'lish va AI sohasida tajriba orttirish.",
+      skillsTitle: "Bilimlar",
+      projectsTitle: "Loyihalar",
+      contactTitle: "Bog'lanish",
+      themeDay: "Kun",
+      themeNight: "Tun"
+    },
+    ru: {
+      pageTitle: 'Мухаммад Саид — Младший разработчик | Портфолио',
+      heroBadge: 'Младший разработчик',
+      heroSubtitle: 'Портфолио — Ташкент, Узбекистан',
+      aboutTitle: 'Обо мне',
+      aboutIntro: '<strong>15 лет</strong>, живу в Узбекистане, г. Ташкент, район Алмазар. Интересуюсь программированием и CИ. Очень нравится набираться опыта в области искусственного интеллекта. Языки: <strong>английский</strong> — Элементарный уровень, <strong>русский</strong> — Элементарный уровень.',
+      aboutInterest: 'Мне очень интересны <strong>искусственный интеллект (AI)</strong> и автоматизация. В будущем хочу делать проекты по AI и машинному обучению, создавать чат-ботов и умные системы. Сейчас занимаюсь Telegram-ботами, сайтами и такими проектами, как калькулятор.',
+      aboutGoal: 'Моя цель — каждый день учиться чему-то новому, стать профессиональным разработчиком и набраться опыта в сфере AI.',
+      skillsTitle: 'Навыки',
+      projectsTitle: 'Проекты',
+      contactTitle: 'Контакты',
+      themeDay: 'День',
+      themeNight: 'Ночь'
+    },
+    en: {
+      pageTitle: 'Muhammad Said — Junior Developer | Portfolio',
+      heroBadge: 'Junior Developer',
+      heroSubtitle: 'Portfolio — Tashkent, Uzbekistan',
+      aboutTitle: 'About me',
+      aboutIntro: '<strong>15 years old</strong>, from Uzbekistan, Tashkent, Almazar district. Interested in programming and AI. I really like gaining experience in artificial intelligence. Languages: <strong>English</strong> — Elementar level, <strong>Russian</strong> — Elementar level.',
+      aboutInterest: 'I am very interested in <strong>Artificial Intelligence (AI)</strong> and automation. In the future I want to build AI and machine learning projects, create chatbots and smart systems. Right now I work on Telegram bots, websites, and projects like a calculator.',
+      aboutGoal: 'My goal is to learn something new every day, become a professional developer, and gain experience in AI.',
+      skillsTitle: 'Skills',
+      projectsTitle: 'Projects',
+      contactTitle: 'Contact',
+      themeDay: 'Day',
+      themeNight: 'Night'
+    }
+  };
+
+  var STORAGE_LANG = 'portfolio_lang';
+  var STORAGE_THEME = 'portfolio_theme';
+
+  function getSavedLang() {
+    try {
+      var s = localStorage.getItem(STORAGE_LANG);
+      return s === 'ru' || s === 'en' ? s : 'uz';
+    } catch (e) { return 'uz'; }
+  }
+
+  function getSavedTheme() {
+    try {
+      var s = localStorage.getItem(STORAGE_THEME);
+      return s === 'light' ? 'light' : 'dark';
+    } catch (e) { return 'dark'; }
+  }
+
+  function setLang(lang) {
+    var t = translations[lang] || translations.uz;
+    document.querySelectorAll('[data-i18n]').forEach(function (el) {
+      var key = el.getAttribute('data-i18n');
+      if (!t[key]) return;
+      if (key === 'aboutIntro' || key === 'aboutInterest' || key === 'aboutGoal') {
+        el.innerHTML = t[key];
+      } else {
+        el.textContent = t[key];
+      }
+      if (key === 'pageTitle' && el.tagName === 'TITLE') document.title = t[key];
+    });
+    document.documentElement.lang = lang === 'uz' ? 'uz' : (lang === 'ru' ? 'ru' : 'en');
+    try { localStorage.setItem(STORAGE_LANG, lang); } catch (e) {}
+    document.querySelectorAll('.lang-btn').forEach(function (btn) {
+      btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+      btn.setAttribute('aria-pressed', btn.getAttribute('data-lang') === lang ? 'true' : 'false');
+    });
+  }
+
+  function setTheme(theme) {
+    document.body.classList.remove('theme-light', 'theme-dark');
+    document.body.classList.add('theme-' + theme);
+    try { localStorage.setItem(STORAGE_THEME, theme); } catch (e) {}
+    document.querySelectorAll('.theme-btn').forEach(function (btn) {
+      btn.classList.toggle('active', btn.getAttribute('data-theme') === theme);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    setTheme(getSavedTheme());
+    setLang(getSavedLang());
+
+    document.querySelectorAll('.lang-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        setLang(btn.getAttribute('data-lang'));
+      });
+    });
+
+    document.querySelectorAll('.theme-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        setTheme(btn.getAttribute('data-theme'));
+      });
+    });
+
+    var sections = document.querySelectorAll('.section');
+    function onScroll() {
+      sections.forEach(function (section) {
+        var rect = section.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.85) section.style.opacity = '1';
+      });
+    }
+    sections.forEach(function (s) {
+      s.style.opacity = '0.85';
+      s.style.transition = 'opacity 0.5s ease';
+    });
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  });
+})();
+</script>
+</body>
+</html>

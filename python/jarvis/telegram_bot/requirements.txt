@@ -1,0 +1,6 @@
+python-telegram-bot>=21.0
+groq>=0.5.0
+python-dotenv>=1.0.0
+pyperclip>=1.8.0
+pyautogui>=0.9.50
+pywinauto>=0.6.8

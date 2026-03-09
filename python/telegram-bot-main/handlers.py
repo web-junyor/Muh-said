@@ -1,50 +1,64 @@
+# -*- coding: utf-8 -*-
 from telegram import Update
 from telegram.ext import ContextTypes
-from app.keyboards import language_keyboard
-from app.services import kiril_lotin, fake_translate
-from app.voice import text_to_voice
 import os
+
+from keyboards import til_tanlash_matni, TIL_TUGMALARI
+from services import kiril_lotin, translate_text
+from voice import text_to_voice
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    context.user_data["lang"] = None
     await update.message.reply_text(
-        "Tilni tanlang 👇",
-        reply_markup=language_keyboard()
-    )
-
-
-async def choose_language(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    query = update.callback_query
-    await query.answer()
-
-    lang = query.data.replace("lang_", "")
-    context.user_data["lang"] = lang
-
-    await query.edit_message_text(
-        f"Tanlandi: {lang.upper()}\nEndi matn yuboring."
+        "Salom! Tarjimon bot.\n\n" + til_tanlash_matni()
     )
 
 
 async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    lang = context.user_data.get("lang")
+    text = (update.message.text or "").strip()
+    text_lower = text.lower()
 
-    if not lang:
-        await update.message.reply_text("Iltimos, avval tilni tanlang (/start).")
+    # Til tanlash — faqat matn (ENG, RUS, 1, 2, ...), hech qanday link/tugma yo'q
+    if text_lower in TIL_TUGMALARI:
+        lang = TIL_TUGMALARI[text_lower]
+        context.user_data["lang"] = lang
+        til_nomi = {"en": "Ingliz", "ru": "Rus", "uz": "O'zbek", "translit": "Kiril ↔ Lotin"}.get(lang, lang)
+        await update.message.reply_text(
+            f"✅ Tanlandi: {til_nomi}\n\nEndi tarjima qilmoqchi bo'lgan matnni yuboring."
+        )
         return
 
-    text = update.message.text
+    # Til tanlanmagan bo'lsa
+    lang = context.user_data.get("lang")
+    if not lang:
+        await update.message.reply_text(
+            "Iltimos, avval tilni tanlang.\n\n" + til_tanlash_matni()
+        )
+        return
 
+    # Bo'sh xabar
+    if not text:
+        await update.message.reply_text("Matn yuboring, tarjima qilaman.")
+        return
+
+    # Tarjima / translit
     if lang == "translit":
         result = kiril_lotin(text)
         voice_lang = "ru"
     else:
-        result = fake_translate(text, lang)
-        voice_lang = lang
+        result = translate_text(text, lang)
+        voice_lang = "ru" if lang == "uz" else lang
 
     await update.message.reply_text(result)
 
     voice_file = text_to_voice(result, voice_lang)
-    with open(voice_file, "rb") as audio:
-        await update.message.reply_voice(audio)
-
-    os.remove(voice_file)
+    if voice_file and os.path.exists(voice_file):
+        try:
+            with open(voice_file, "rb") as audio:
+                await update.message.reply_voice(audio)
+        finally:
+            try:
+                os.remove(voice_file)
+            except Exception:
+                pass

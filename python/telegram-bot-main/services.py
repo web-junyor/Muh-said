@@ -72,3 +72,36 @@ def cyrillic_to_latin(text: str) -> str:
         result.append(reverse_map.get(char, char))
 
     return "".join(result)
+
+
+def _is_mostly_cyrillic(text: str) -> bool:
+    """Matn asosan kiril harflaridan iboratmi tekshiradi."""
+    cyrillic = sum(1 for c in text if '\u0400' <= c <= '\u04FF')
+    return cyrillic > len(text) / 2
+
+
+def kiril_lotin(text: str) -> str:
+    """
+    Avtomatik aniqlaydi: kiril bo'lsa lotinga, lotin bo'lsa kirilga o'giradi.
+    """
+    if not text:
+        return ""
+    if _is_mostly_cyrillic(text):
+        return cyrillic_to_latin(text)
+    return latin_to_cyrillic(text)
+
+
+def translate_text(text: str, lang: str) -> str:
+    """
+    Matnni berilgan tilga tarjima qiladi. lang: en, ru, uz
+    """
+    if not text or not text.strip():
+        return ""
+    try:
+        from deep_translator import GoogleTranslator
+        lang_map = {"en": "en", "ru": "ru", "uz": "uz"}
+        target = lang_map.get(lang, "en")
+        translator = GoogleTranslator(source="auto", target=target)
+        return translator.translate(text)
+    except Exception as e:
+        return f"[Tarjima xato: {e}]\n{text}"

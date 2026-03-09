@@ -1,0 +1,6 @@
+# Jarvis ovozli yordamchi uchun (mikrofon = PyAudio)
+SpeechRecognition>=3.10.0
+PyAudio>=0.2.14
+fuzzywuzzy>=0.18.0
+python-Levenshtein>=0.27.0
+pyttsx3>=2.90

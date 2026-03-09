@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,7 +26,9 @@ SECRET_KEY = 'django-insecure-22qfi%wj4%$b6=gdzgjb*re%_gj28w+g4#h0+*1@6r!#ovf%)s
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# Boshqa qurilmalar (telefon, planshet) ham saytga kirishi uchun: runserver 0.0.0.0:8001
+# va PUBLIC_SITE_URL ni laptop IP ga qo'ying, masalan http://192.168.1.100:8001
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', '*']
 
 
 # Application definition
@@ -37,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'blog',
     'accounts',
 ]
@@ -123,3 +127,8 @@ LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+BOT_API_KEY="sk-51e9b8c1-9a7c-4d5e-8f0b-9c6e2f1a2b3c"
+# Botdagi "Sayt ochish" linki shu manzilga boradi. Boshqa qurilmalar kirishi uchun
+# laptop IP ni qo'ying (masalan http://192.168.1.100:8001). IP ni bilish: Windows: ipconfig, Mac/Linux: ifconfig
+PUBLIC_SITE_URL = os.environ.get("PUBLIC_SITE_URL", "http://127.0.0.1:8001")
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

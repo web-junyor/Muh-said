@@ -1,23 +1,74 @@
-{% extends 'base.html' %}
+ {% extends 'base.html' %}
 
 {% block content %}
 
-
 <article class="post-detail">
+  {% if post.post_type == "reja" %}
+  {# Reja: ○ tugma — bosganda ● (yonib) turadi, saytda ham bosiladi #}
+  <div class="reja-circle-buttons" style="margin:1em 0;" data-post-id="{{ post.id }}">
+    <p style="margin-bottom:0.5em;"><strong>📋 Reja</strong></p>
+    {% if post.image %}
+    <img src="{{ post.image.url }}" alt="Reja rasm" style="max-width:100%; border-radius:10px; margin-bottom:1em;">
+    {% endif %}
+    <div class="reja-row" style="display:flex; align-items:flex-start; margin:0.5em 0; padding:0.5em; border:1px solid #ddd; border-radius:8px;">
+      <button type="button" class="reja-circle-btn" data-post="{{ post.id }}" data-field="sarlavha" aria-pressed="false" style="flex-shrink:0; width:36px; height:36px; margin-right:10px; border:2px solid #2196F3; border-radius:50%; background:#fff; font-size:1.2em; line-height:1; cursor:pointer; color:#2196F3;">○</button>
+      <div style="flex:1;">🧾 Sarlavha: {{ post.title }}</div>
+    </div>
+    <div class="reja-row" style="display:flex; align-items:flex-start; margin:0.5em 0; padding:0.5em; border:1px solid #ddd; border-radius:8px;">
+      <button type="button" class="reja-circle-btn" data-post="{{ post.id }}" data-field="body" aria-pressed="false" style="flex-shrink:0; width:36px; height:36px; margin-right:10px; border:2px solid #2196F3; border-radius:50%; background:#fff; font-size:1.2em; line-height:1; cursor:pointer; color:#2196F3;">○</button>
+      <div style="flex:1;">📄 Body: {{ post.body|linebreaks }}</div>
+    </div>
+  </div>
+  <script>
+  (function() {
+    var el = document.querySelector('.reja-circle-buttons');
+    var postId = el ? parseInt(el.getAttribute('data-post-id'), 10) : 0;
+    var keyS = 'reja_' + postId + '_sarlavha';
+    var keyB = 'reja_' + postId + '_body';
+    function setBtn(btn, checked) {
+      if (!btn) return;
+      btn.textContent = checked ? '\u25CF' : '\u25CB';
+      btn.style.background = checked ? '#2196F3' : '#fff';
+      btn.style.color = checked ? '#fff' : '#2196F3';
+      btn.setAttribute('aria-pressed', checked ? 'true' : 'false');
+    }
+    function load() {
+      document.querySelectorAll('.reja-circle-btn').forEach(function(btn) {
+        var field = btn.getAttribute('data-field');
+        var key = field === 'sarlavha' ? keyS : keyB;
+        var checked = localStorage.getItem(key) === '1';
+        setBtn(btn, checked);
+        btn.addEventListener('click', function() {
+          checked = localStorage.getItem(key) === '1';
+          checked = !checked;
+          localStorage.setItem(key, checked ? '1' : '0');
+          setBtn(btn, checked);
+        });
+      });
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', load);
+    else load();
+  })();
+  </script>
+  {% else %}
   <h2>{{ post.title }}</h2>
   <p class="post-author">{{ post.author }}</p>
-
-<div class="post-body">
-  {% if post.image %}
-    <img src="{{ post.image.url }}" alt="post image" style="max-width:100%; border-radius:10px;">
+  <div class="post-body">
+    {% if post.image %}
+      <img src="{{ post.image.url }}" alt="post image" style="max-width:100%; border-radius:10px;">
+    {% endif %}
+    <p>{{ post.body|linebreaks }}</p>
+  </div>
   {% endif %}
-  <p>{{ post.body }}</p>
-</div>
-
 
   <div class="post-actions">
+    {% if request.GET.t %}
+    <a href="{% url 'post_edit' post.pk %}?t={{ request.GET.t }}">✏️ Tahrirlash</a>
+    <a href="{% url 'post_delete' post.pk %}?t={{ request.GET.t }}">🗑 O'chirish</a>
+    {% else %}
     <a href="{% url 'post_edit' post.pk %}">✏️ Tahrirlash</a>
-    <a href="{% url 'post_delete' post.pk %}">🗑 O‘chirish</a>
+    <a href="{% url 'post_delete' post.pk %}">🗑 O'chirish</a>
+    {% endif %}
   </div>
 </article>
 {% endblock %}

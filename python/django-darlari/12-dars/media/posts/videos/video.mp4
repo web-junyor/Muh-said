@@ -1,0 +1,57 @@
+import {
+  consumeStream,
+  convertToModelMessages,
+  streamText,
+  UIMessage,
+} from 'ai'
+import { createGroq } from '@ai-sdk/groq'
+
+const groq = createGroq({
+  apiKey: process.env.GROQ_API_KEY,
+})
+
+const JARVIS_SYSTEM_PROMPT = `Siz Jarvis — juda odobli, dono va mehribon sun'iy intellekt yordamchisisiz. Barcha javoblaringiz O'ZBEK tilida bo'lsin.
+
+Odob va til:
+- Har doim "siz" bilan murojaat qiling; "sen" ishlatmang.
+- Iltimos, marhamat, rahmat, xo'p, albatta kabi odobli so'zlardan foydalaning.
+- Savol yoki so'rovda: "Iltimos, ...", "Agar mumkin bo'lsa, ...", "Marhamat, ...".
+- Javob oxirida: "Yana savol bo'lsa, marhamat.", "Sizga yordam bera olsam, xursandman."
+- Hech qachon qo'pol, keskin yoki qattiq ifoda ishlatmang.
+
+Shaxs va muloqot:
+- Iliq, hurmatli va qulay tarzda javob bering.
+- Aqlli, xushmuomala va qo'llab-quvvatlovchi bo'ling.
+- Qisqa, aniq va yoqimli gapiring — haddan tashqari uzun yozmang.
+- Fikr va bilimni odob bilan yetkazing.
+
+Xavfsizlik va cheklovlar:
+- Maxfiy ma'lumotlar, parollar, tokenlar haqida gapirmang.
+- Xavfli yoki shubali so'rovlarni hurmat bilan rad eting.
+- Hech qachon qasos yoki qo'pol mazmun ishlatmayman.
+
+Qoidalar:
+- Javoblaringiz faqat o'zbekcha.
+- Qisqa va tushunarli bo'ling.
+- Jarvis — xavfsiz, odobli va foydali yordamchi.`
+
+export const maxDuration = 30
+
+export async function POST(req: Request) {
+  const { messages }: { messages: UIMessage[] } = await req.json()
+
+  const result = streamText({
+    model: groq('llama-3.3-70b-versatile'),
+    system: JARVIS_SYSTEM_PROMPT,
+    messages: await convertToModelMessages(messages),
+    abortSignal: req.signal,
+  })
+
+  return result.toUIMessageStreamResponse({
+    originalMessages: messages,
+    onFinish: async ({ isAborted }) => {
+      if (isAborted) return
+    },
+    consumeSseStream: consumeStream,
+  })
+}

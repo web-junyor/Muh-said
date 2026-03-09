@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>calkulator</title>
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+    :root {
+      --bg-color: rgba(255, 255, 255, 0.15);
+      --button-color: rgba(255, 255, 255, 0.1);
+      --text-color: #fff;
+      --accent: #00ffcc;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg-color: rgba(0, 0, 0, 0.1);
+        --button-color: rgba(0, 0, 0, 0.05);
+        --text-color: #222;
+        --accent: #0077ff;
+      }
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      color: #ffffff;
+    }
+
+    .calculator {
+      width: 330px;
+      border-radius: 25px;
+      backdrop-filter: blur(20px);
+      background: var(--bg-color);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: appear 1s ease-in-out;
+    }
+
+    @keyframes appear {
+      from { transform: scale(0.7); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    input {
+      width: 100%;
+      height: 80px;
+      font-size: 36px;
+      text-align: right;
+      margin-bottom: 20px;
+      background: transparent;
+      border: none;
+      color: var(--text-color);
+      outline: none;
+      border-bottom: 2px solid var(--accent);
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    button {
+      width: 70px;
+      height: 70px;
+      font-size: 22px;
+      border-radius: 20px;
+      background: var(--button-color);
+      border: none;
+      color: var(--text-color);
+      box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+      transition: all 0.2s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    button:active {
+      transform: scale(0.95);
+      box-shadow: 0 0 15px var(--accent);
+      background: rgba(0,255,204,0.2);
+    }
+
+    .operator {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .equalBtn {
+      background: var(--accent);
+      color: #000;
+      font-weight: bold;
+      box-shadow: 0 5px 15px rgba(45, 61, 8, 0.4);
+      background-color: rgb(252, 101, 0);
+    }
+
+    .equalBtn:active {
+      background: #00ffccaa;
+      box-shadow: 0 0 25px var(--accent);
+
+
+    }</style>
+<body>
+
+  <div class="calculator">
+    <input style="color:#fff" type="text" id="inputBox" placeholder="0" readonly>
+    <div class="buttons">
+      <button class="operator">AC</button>
+      <button class="operator">DEL</button>
+      <button class="operator">%</button>
+      <button class="operator">/</button>
+
+      <button style="color:#fff">7</button>
+      <button style="color:#fff">8</button>
+      <button style="color:#fff">9</button>
+      <button class="operator">*</button>
+
+      <button style="color:#fff">4</button>
+      <button style="color:#fff">5</button>
+      <button style="color:#fff">6</button>
+      <button class="operator">-</button>
+
+      <button style="color:#fff">1</button>
+      <button style="color:#fff">2</button>
+      <button style="color:#fff">3</button>
+      <button class="operator">+</button>
+
+      <button style="color:#fff">00</button>
+      <button style="color:#fff">0</button>
+      <button style="color:#fff">.</button>
+      <button class="equalBtn">=</button>
+    </div>
+
+  <br>
+  <br>
+
+      <footer>This was created by Developer Muhammad Said.</footer>
+  </div>
+
+</body>
+<script>
+
+    "use strict";
+    let input = document.getElementById('inputBox');
+    let buttons = document.querySelectorAll('button');
+
+    let string = "";
+    let arr = Array.from(buttons);
+
+    arr.forEach(button => {
+      button.addEventListener('click', (e) => {
+        let val = e.target.innerHTML;
+
+        if (val === '=') {1
+          try {
+            string = eval(string);
+            input.value = string;
+          } catch {
+            input.value = "Xato!";
+          }
+        }
+        else if (val === 'AC') {
+          string = "";
+          input.value = string;
+        }
+        else if (val === 'DEL') {
+          string = string.slice(0, -1);
+          input.value = string;
+        }
+        else {
+          string += val;
+          input.value = string;
+        }
+      });
+    })
+    </script>
+</html>
